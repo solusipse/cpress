@@ -1,7 +1,11 @@
-from ctypes import cdll
 from keylist import *
+import _cpress as cpresslib
 
-cpresslib = cdll.LoadLibrary('../cpress.so')
+class CpressDebug:
+
+    def __init__(self):
+        from ctypes import cdll
+        cpresslib = cdll.LoadLibrary('../../cpress.so')
 
 class Cpress:
 
