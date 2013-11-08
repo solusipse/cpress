@@ -14,4 +14,4 @@ example:
 	$(CC) -o example $(CFLAGS) $(EXAMPLESDIR)/example.c
 
 clean:
-	rm -rf *o main example
+	rm -rf *o main example build
