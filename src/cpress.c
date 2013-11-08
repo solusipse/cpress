@@ -1,5 +1,26 @@
+/*
+cpress - C library for simulating keypress.
+
+Requirements:
+- Linux
+- running uinput (modprobe uinput)
+- root privileges
+
+There are Python and Go bindings for this library.
+
+-------------------------------------------------------------------------------
+
+License: MIT (http://www.opensource.org/licenses/mit-license.php)
+Repository: https://github.com/solusipse/cpress
+
+-------------------------------------------------------------------------------
+
+*/
+
+
 #include <stdio.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -11,7 +32,7 @@
 #include <linux/input.h>
 #include <linux/uinput.h>
 
-static int uinput = -1;
+int uinput = -1;
 
 int open_uinput();
 int fd_initialize();
@@ -27,7 +48,7 @@ void initialize()
 {
     uinput = fd_initialize();
     if(uinput == -1)
-        error("pemissions");
+        error("initialization");
 }
 
 
@@ -39,14 +60,35 @@ void finish()
 
 void press_key(int key)
 {
+    usleep(4000);
     ci_write(EV_KEY, key, 1);
     ci_write(EV_SYN, SYN_REPORT, 0);
 }
 
 
+void press_combination(int num_args, ...)
+{
+
+    va_list keylist;
+    int i;
+
+    va_start(keylist, num_args);
+
+    for(i = 0; i < num_args; i++)
+    {
+        usleep(5000);
+        ci_write(EV_KEY, va_arg(keylist, int), 1);
+    }
+
+    va_end(keylist);
+
+    ci_write(EV_SYN, SYN_REPORT, 0);
+
+}
+
+
 void ci_write(int type, int code, int value)
 {
-    usleep(5000);
     struct input_event ie;
 
     memset(&ie, 0, sizeof(ie));
@@ -66,13 +108,17 @@ int open_uinput()
     if ((fd = open("/dev/input/uinput", O_WRONLY | O_NONBLOCK)) == -1)
         if ((fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK)) == -1)
             if ((fd = open("/dev/misc/uinput", O_WRONLY | O_NONBLOCK)) == -1)
-                error("permissions");
+            {
+                printf("Please, run as root.\n");
+                exit(1);
+            }
 
     return fd;
 }
 
 
-int fd_initialize(){
+int fd_initialize()
+{
     int fd, key;
     struct uinput_user_dev dev;
 
@@ -83,23 +129,22 @@ int fd_initialize(){
     dev.name[sizeof(dev.name) - 1] = 0;
 
     if(write(fd, &dev, sizeof(dev)) != sizeof(dev))
-        error("write");
+        return -1;
 
     if(ioctl(fd, UI_SET_EVBIT, EV_KEY) != 0)
-        error("write");
+        return -1;
 
     if(ioctl(fd, UI_SET_EVBIT, EV_REP) != 0)
-        error("write");
+        return -1;
 
     for (key = KEY_RESERVED; key <= KEY_UNKNOWN; key++)
         if (ioctl(fd, UI_SET_KEYBIT, key) != 0)
-            error("write");
+            return -1;
 
     if (ioctl(fd, UI_DEV_CREATE) != 0)
-        error("write");
+        return -1;
 
     return fd;
-
 }
 
 
