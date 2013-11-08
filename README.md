@@ -1,30 +1,43 @@
 cpress
 ======
 
-cpress is C library for simulating keyboard actions. It interacts with ```/dev/uinput``` so it's low level and 
+cpress is C library for simulating keyboard actions. It interacts with `/dev/uinput` so it's low level and 
 xserver independent. There are Python and Golang (TODO) bindings.
 
-### Installation ###
+---------------
 
-#### C ####
+## Installation ##
 
-See '''Makefile''' for more informations. Compile example with:
-'''
+---------------
+
+### C ###
+
+---------------
+
+See `Makefile` or more informations. Compile example with:
+```
 make example
-'''
+```
 
-#### Python ####
+
+### Python ###
+
+---------------
 
 Simply run as root:
 
-'''
+```
 python2 setup.py install
-'''
+```
 
-### Usage ###
+----------------
 
-See '''src/examples/''' for more informations.
+## Usage ##
 
-### License ###
+See `src/examples/` for more informations.
+
+---------------
+
+## License ##
 
 cpress is MIT licensed.
