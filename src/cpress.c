@@ -32,62 +32,70 @@ Repository: https://github.com/solusipse/cpress
 #include <linux/input.h>
 #include <linux/uinput.h>
 
+int uinput = -1;
 
 int open_uinput();
 int fd_initialize();
 
 void finish();
-int initialize();
+void initialize();
 void press_key(int key);
 void error(char *error_code);
-void ci_write(int uinput, int type, int code, int value);
+void ci_write(int type, int code, int value);
 
 
-int initialize()
+void initialize()
 {
-    int uinput = fd_initialize();
+    uinput = fd_initialize();
     if(uinput == -1)
         error("initialization");
-    usleep(3000);
-
-    return uinput;
+    usleep(10000);
 }
 
 
-void finish(int uinput)
+void finish()
 {
+    ioctl(uinput, UI_DEV_DESTROY);
     close(uinput);
 }
 
 
 void press_key(int key)
 {
-    int uinput = initialize();
-    ci_write(uinput, EV_KEY, key, 1);
-    ci_write(uinput, EV_SYN, SYN_REPORT, 0);
-    finish(uinput);
+    ci_write(EV_KEY, key, 1);
+    ci_write(EV_KEY, key, 0);
+    ci_write(EV_SYN, SYN_REPORT, 0);
 }
 
 
 void press_combination(int num_args, ...)
 {
 
-    int i, uinput = initialize();
     va_list keylist;
+    int i;
 
     va_start(keylist, num_args);
+
     for(i = 0; i < num_args; i++)
     {
-        ci_write(uinput, EV_KEY, va_arg(keylist, int), 1);
+        ci_write(EV_KEY, va_arg(keylist, int), 1);
     }
+
+    ci_write(EV_SYN, SYN_REPORT, 0);
+
+    for(i = 0; i < num_args; i++)
+    {
+        ci_write(EV_KEY, va_arg(keylist, int), 0);
+    }
+
     va_end(keylist);
 
-    ci_write(uinput, EV_SYN, SYN_REPORT, 0);
-    finish(uinput);
+    ci_write(EV_SYN, SYN_REPORT, 0);
+
 }
 
 
-void ci_write(int uinput, int type, int code, int value)
+void ci_write(int type, int code, int value)
 {
     struct input_event ie;
 
@@ -123,8 +131,10 @@ int fd_initialize()
     struct uinput_user_dev dev;
 
     fd = open_uinput();
+
     memset(&dev, 0, sizeof(dev));
     strncpy(dev.name, "c2h2_spi_kbd", UINPUT_MAX_NAME_SIZE);
+
 
     if(write(fd, &dev, sizeof(dev)) != sizeof(dev))
         return -1;
