@@ -32,27 +32,29 @@ Repository: https://github.com/solusipse/cpress
 #include <linux/input.h>
 #include <linux/uinput.h>
 
-int uinput = -1;
 
 int open_uinput();
 int fd_initialize();
 
 void finish();
-void initialize();
+int initialize();
 void press_key(int key);
 void error(char *error_code);
-void ci_write(int type, int code, int value);
+void ci_write(int uinput, int type, int code, int value);
 
 
-void initialize()
+int initialize()
 {
-    uinput = fd_initialize();
+    int uinput = fd_initialize();
     if(uinput == -1)
         error("initialization");
+    usleep(3000);
+
+    return uinput;
 }
 
 
-void finish()
+void finish(int uinput)
 {
     close(uinput);
 }
@@ -60,34 +62,32 @@ void finish()
 
 void press_key(int key)
 {
-    usleep(4000);
-    ci_write(EV_KEY, key, 1);
-    ci_write(EV_SYN, SYN_REPORT, 0);
+    int uinput = initialize();
+    ci_write(uinput, EV_KEY, key, 1);
+    ci_write(uinput, EV_SYN, SYN_REPORT, 0);
+    finish(uinput);
 }
 
 
 void press_combination(int num_args, ...)
 {
 
+    int i, uinput = initialize();
     va_list keylist;
-    int i;
 
     va_start(keylist, num_args);
-
     for(i = 0; i < num_args; i++)
     {
-        usleep(5000);
-        ci_write(EV_KEY, va_arg(keylist, int), 1);
+        ci_write(uinput, EV_KEY, va_arg(keylist, int), 1);
     }
-
     va_end(keylist);
 
-    ci_write(EV_SYN, SYN_REPORT, 0);
-
+    ci_write(uinput, EV_SYN, SYN_REPORT, 0);
+    finish(uinput);
 }
 
 
-void ci_write(int type, int code, int value)
+void ci_write(int uinput, int type, int code, int value)
 {
     struct input_event ie;
 
@@ -123,23 +123,21 @@ int fd_initialize()
     struct uinput_user_dev dev;
 
     fd = open_uinput();
-
     memset(&dev, 0, sizeof(dev));
-    strncpy(dev.name, "c2h2_spi_kbd", sizeof(dev.name));
-    dev.name[sizeof(dev.name) - 1] = 0;
+    strncpy(dev.name, "c2h2_spi_kbd", UINPUT_MAX_NAME_SIZE);
 
     if(write(fd, &dev, sizeof(dev)) != sizeof(dev))
         return -1;
+
+    for (key = 0; key < 256; key++)
+        if (ioctl(fd, UI_SET_KEYBIT, key) != 0)
+            return -1;
 
     if(ioctl(fd, UI_SET_EVBIT, EV_KEY) != 0)
         return -1;
 
     if(ioctl(fd, UI_SET_EVBIT, EV_REP) != 0)
         return -1;
-
-    for (key = KEY_RESERVED; key <= KEY_UNKNOWN; key++)
-        if (ioctl(fd, UI_SET_KEYBIT, key) != 0)
-            return -1;
 
     if (ioctl(fd, UI_DEV_CREATE) != 0)
         return -1;
