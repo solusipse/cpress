@@ -14,7 +14,6 @@ License: MIT (http://www.opensource.org/licenses/mit-license.php)
 Repository: https://github.com/solusipse/cpress
 
 -------------------------------------------------------------------------------
-
 */
 
 
@@ -98,12 +97,16 @@ void press_combination(int num_args, ...)
     int i;
 
     va_start(keylist, num_args);
-        for(i = 0; i < num_args; i++)
+        for(i = 0; i < num_args + 1; i++)
         {
             ci_write(EV_KEY, va_arg(keylist, int), 1);
         }
+    va_end(keylist);
+
     ci_write(EV_SYN, SYN_REPORT, 0);
-        for(i = 0; i < num_args; i++)
+    
+    va_start(keylist, num_args);
+        for(i = 0; i < num_args + 1; i++)
         {
             ci_write(EV_KEY, va_arg(keylist, int), 0);
         }
