@@ -1,4 +1,4 @@
-#include "cpress.c"
+#include "../cpress.c"
 
 int main()
 {
