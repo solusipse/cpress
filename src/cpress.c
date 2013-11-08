@@ -76,6 +76,7 @@ void press_key(int key)
 
 void hold_key(int key)
 {
+    /* Use this to add modifiers, for example KEY_LEFTSHIFT */
     ci_write(EV_KEY, key, 1);
     ci_write(EV_SYN, SYN_REPORT, 0);
 }
@@ -83,6 +84,7 @@ void hold_key(int key)
 
 void release_key(int key)
 {
+    /* Used to release keys triggered by hold_key() */
     ci_write(EV_KEY, key, 0);
     ci_write(EV_SYN, SYN_REPORT, 0);
 }
