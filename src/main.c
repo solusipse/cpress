@@ -9,11 +9,15 @@ int main()
     press_key(KEY_B);
     press_key(KEY_B);
 
+    hold_key(KEY_LEFTSHIFT);
+
     //press_combination(3, KEY_C, KEY_D, KEY_E);
 
     //press_combination(5, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5);
 
     press_key(KEY_D);
+
+    release_key(KEY_LEFTSHIFT);
 
     press_key(KEY_SPACE);
 

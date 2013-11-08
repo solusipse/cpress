@@ -46,15 +46,19 @@ void ci_write(int type, int code, int value);
 
 void initialize()
 {
+    /* This function is used for initializing everything. */
     uinput = fd_initialize();
     if(uinput == -1)
         error("initialization");
-    usleep(10000);
+
+    usleep(10000); /* That is required because /dev/input
+    needs some time for creating new input. */
 }
 
 
 void finish()
 {
+    /* Use this function at the end to clean up. */
     ioctl(uinput, UI_DEV_DESTROY);
     close(uinput);
 }
@@ -62,7 +66,23 @@ void finish()
 
 void press_key(int key)
 {
+    /* This function is used for simulating single
+    press and release action. */
     ci_write(EV_KEY, key, 1);
+    ci_write(EV_KEY, key, 0);
+    ci_write(EV_SYN, SYN_REPORT, 0);
+}
+
+
+void hold_key(int key)
+{
+    ci_write(EV_KEY, key, 1);
+    ci_write(EV_SYN, SYN_REPORT, 0);
+}
+
+
+void release_key(int key)
+{
     ci_write(EV_KEY, key, 0);
     ci_write(EV_SYN, SYN_REPORT, 0);
 }
@@ -70,28 +90,24 @@ void press_key(int key)
 
 void press_combination(int num_args, ...)
 {
-
+    /* This function is used for simulating multiple
+    keys pressed in one moment. */
     va_list keylist;
     int i;
 
     va_start(keylist, num_args);
-
-    for(i = 0; i < num_args; i++)
-    {
-        ci_write(EV_KEY, va_arg(keylist, int), 1);
-    }
-
+        for(i = 0; i < num_args; i++)
+        {
+            ci_write(EV_KEY, va_arg(keylist, int), 1);
+        }
     ci_write(EV_SYN, SYN_REPORT, 0);
-
-    for(i = 0; i < num_args; i++)
-    {
-        ci_write(EV_KEY, va_arg(keylist, int), 0);
-    }
-
+        for(i = 0; i < num_args; i++)
+        {
+            ci_write(EV_KEY, va_arg(keylist, int), 0);
+        }
     va_end(keylist);
 
     ci_write(EV_SYN, SYN_REPORT, 0);
-
 }
 
 
