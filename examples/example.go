@@ -1,6 +1,8 @@
 package main
 
+import "C"
 import "github.com/solusipse/cpress/go"
+
 
 func main() {
 
@@ -12,4 +14,7 @@ func main() {
     cpress.Press_key(cpress.KEY_D)
     cpress.Release_key(cpress.KEY_LEFTSHIFT)
     cpress.Press_key(cpress.KEY_E)
+    cpress.Press_combination(cpress.KEY_LEFTSHIFT, cpress.KEY_F)
+    cpress.Press_key(cpress.KEY_G)
+
 }

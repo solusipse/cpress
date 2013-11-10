@@ -19,7 +19,15 @@ func Release_key(key C.int) {
     C.release_key(key)
 }
 
-/* TODO: C.press_combination() */
+func Press_combination(keys ... _Ctype_int) {
+    for i := range keys {
+        C.hold_key(keys[i])
+    }
+    for i := range keys {
+        C.release_key(keys[i])
+    }
+    
+}
 
 
 /* Keylist */
