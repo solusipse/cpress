@@ -2,41 +2,85 @@ cpress
 ======
 
 cpress is C library for simulating keyboard actions. It interacts with `/dev/uinput` so it's low level and 
-xserver independent. There are Python and Golang (TODO) bindings.
+xserver independent. There are Python and Go bindings.
 
----------------
+----------------------------
 
-## Installation ##
+## Installation and usage ##
 
----------------
+----------------------------
+
+### Before installation ###
+
+Be aware that defaultly `/dev/uinput` is writable only for root.
+You can use cpress as root or change permissions level:
+
+```bash
+chmod +0666 /dev/uinput
+```
+
+----------------------------
 
 ### C ###
 
----------------
+#### Installation ####
 
 See `Makefile` or more informations. Compile example with:
-```
+```bash
 make example
 ```
+
+#### Usage ####
+
+See self-explanatory file `examples/example.c` for more informations.
+
+----------------------------
 
 
 ### Python ###
 
----------------
+#### Installation ####
 
 Simply run as root:
 
-```
+```bash
 python2 setup.py install
 ```
 
-----------------
+#### Usage ####
 
-## Usage ##
+Import module with:
 
-See `src/examples/` for more informations.
+```python
+from cpress import *
+```
 
----------------
+See self-explanatory file `examples/example.py` for more informations.
+
+----------------------------
+
+### Go ###
+
+#### Installation ####
+
+Just use that command:
+
+```bash
+go get github.com/solusipse/cpress/go
+```
+
+#### Usage ####
+
+Import package with:
+
+```go
+import "github.com/solusipse/cpress/go"
+```
+
+See self-explanatory file `examples/example.go` for more informations.
+
+
+----------------------------
 
 ## License ##
 
