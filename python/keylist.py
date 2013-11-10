@@ -1,3 +1,28 @@
+'''
+cpress - python bindings
+
+-------------------------------------------------------------------------------
+
+Installation:
+
+    python2 setup.py install
+
+Usage:
+
+Import module with:
+
+    from cpress import *
+
+See self-explanatory file `examples/example.py` for more informations.
+
+-------------------------------------------------------------------------------
+
+License: MIT (http://www.opensource.org/licenses/mit-license.php)
+Repository: https://github.com/solusipse/cpress
+
+-------------------------------------------------------------------------------
+'''
+
 KEY_RESERVED = 0
 KEY_ESC = 1
 KEY_1 = 2

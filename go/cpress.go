@@ -1,25 +1,69 @@
+/*
+cpress - go bindings
+
+-------------------------------------------------------------------------------
+
+Installation:
+
+    go get github.com/solusipse/cpress/go
+
+Usage:
+
+Import package with:
+
+    import "github.com/solusipse/cpress/go"
+
+See self-explanatory file `examples/example.go` for more informations.
+
+-------------------------------------------------------------------------------
+
+License: MIT (http://www.opensource.org/licenses/mit-license.php)
+Repository: https://github.com/solusipse/cpress
+
+-------------------------------------------------------------------------------
+*/
+
 package cpress
 
 // #include "../src/cpress.c"
 import "C"
 
 func Initialize() {
+	/*
+	This method is used to initialize cpress. Call it before
+	doing anything.
+	*/
     C.initialize()
 }
 
 func Press_key(key C.int) {
+	/*
+	Simple key press.
+	*/
     C.press_key(key)
 }
 
 func Hold_key(key C.int) {
+	/*
+	This method changes key state to pressed until Release_key
+	method is called for same key.
+	*/
     C.hold_key(key)
 }
 
 func Release_key(key C.int) {
+	/*
+	This method releases previously activated key
+	*/
     C.release_key(key)
 }
 
 func Press_combination(keys ... _Ctype_int) {
+	/*
+	This method had to be rewritten because of incompatibility
+	of C variadic function and Go.
+	It allows to do key combos, for example: CTRL+C, CTRL+ALT+F1.
+	*/
     for i := range keys {
         C.hold_key(keys[i])
     }
@@ -27,6 +71,13 @@ func Press_combination(keys ... _Ctype_int) {
         C.release_key(keys[i])
     }
     
+}
+
+func Close() {
+	/*
+	Use this for clean up.
+	*/
+	C.finish()
 }
 
 

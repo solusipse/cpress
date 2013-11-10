@@ -1,6 +1,19 @@
 '''
+cpress - python bindings
 
-Python bindings for cpress.
+-------------------------------------------------------------------------------
+
+Installation:
+
+    python2 setup.py install
+
+Usage:
+
+Import module with:
+
+    from cpress import *
+
+See self-explanatory file `examples/example.py` for more informations.
 
 -------------------------------------------------------------------------------
 
@@ -8,7 +21,6 @@ License: MIT (http://www.opensource.org/licenses/mit-license.php)
 Repository: https://github.com/solusipse/cpress
 
 -------------------------------------------------------------------------------
-
 '''
 
 from ctypes import cdll
