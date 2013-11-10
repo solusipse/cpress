@@ -7,6 +7,6 @@ module1 = Extension('_cpress',
 setup (name = 'cpress',
         version = '0.1',
         description = 'Python binding for cpress library',
-        package_dir={'cpress': 'python-bindings'},
+        package_dir={'cpress': 'python'},
         packages = ['cpress'],
         ext_modules = [module1])
