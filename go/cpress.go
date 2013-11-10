@@ -1,6 +1,6 @@
 package cpress
 
-// #include "src/cpress.c"
+// #include "../src/cpress.c"
 import "C"
 
 func Initialize() {
