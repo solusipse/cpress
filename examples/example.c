@@ -1,5 +1,4 @@
-'''
-
+/*
 Example usage of cpress library with static linking.
 
 -------------------------------------------------------------------------------
@@ -8,10 +7,9 @@ License: MIT (http://www.opensource.org/licenses/mit-license.php)
 Repository: https://github.com/solusipse/cpress
 
 -------------------------------------------------------------------------------
+*/
 
-'''
-
-#include "../cpress.c"
+#include "../src/cpress.c"
 
 int main()
 {

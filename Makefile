@@ -2,7 +2,7 @@ CC=gcc
 LFLAGS=-fPIC -c
 CFLAGS=-O2 -Wall
 BUILDDIR=build
-EXAMPLESDIR=src/examples
+EXAMPLESDIR=examples
 prefix=/usr/local
 
 all:
@@ -14,4 +14,4 @@ example:
 	$(CC) -o example $(CFLAGS) $(EXAMPLESDIR)/example.c
 
 clean:
-	rm -rf *o main example build
+	rm -rf *.o *.so main example build
