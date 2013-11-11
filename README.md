@@ -17,7 +17,9 @@ You can use cpress as root or change permissions level:
 chmod +0666 /dev/uinput
 ```
 
-Cpress will ask for root password if won't be able to operate on uinput file.
+Cpress asks for root password if is not be able to operate on uinput file. Then
+it will chmod uinput file. If you want to avoid that for some reasons, always run
+as root.
 
 ----------------------------
 
