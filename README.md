@@ -8,8 +8,6 @@ xserver independent. There are Python and Go bindings.
 
 ## Installation and usage ##
 
-----------------------------
-
 ### Before installation ###
 
 Be aware that defaultly `/dev/uinput` is writable only for root.
@@ -18,6 +16,8 @@ You can use cpress as root or change permissions level:
 ```bash
 chmod +0666 /dev/uinput
 ```
+
+Cpress will ask for root password if won't be able to operate on uinput file.
 
 ----------------------------
 
