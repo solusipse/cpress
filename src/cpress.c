@@ -160,8 +160,6 @@ void ask_for_password()
 {
     /* This function asks for root password and changes
     mode of uinput */
-    printf("Could not open uinput. Type root password below.");
-
     if (access("/dev/input/uinput", F_OK) == 0)
         system("su -c \"chmod +0666 /dev/input/uinput\"");
     if (access("/dev/uinput", F_OK) == 0)
