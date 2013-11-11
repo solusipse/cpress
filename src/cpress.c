@@ -21,6 +21,9 @@ Repository: https://github.com/solusipse/cpress
 void initialize()
 {
     /* This function is used for initializing everything. */
+
+    check_permissions();
+
     uinput = fd_initialize();
     if(uinput == -1)
         error("initialization");
@@ -113,7 +116,7 @@ int open_uinput()
         if ((fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK)) == -1)
             if ((fd = open("/dev/misc/uinput", O_WRONLY | O_NONBLOCK)) == -1)
             {
-                printf("Please, run as root.\n");
+                printf("No enough permissions to write to uinput.\n");
                 exit(1);
             }
 
@@ -123,6 +126,8 @@ int open_uinput()
 
 int fd_initialize()
 {
+    /* This function is used for initialization, it is called internally
+    by initialization() */
     int fd, key;
     struct uinput_user_dev dev;
 
@@ -149,6 +154,30 @@ int fd_initialize()
         return -1;
 
     return fd;
+}
+
+void ask_for_password()
+{
+    /* This function asks for root password and changes
+    mode of uinput */
+    printf("Could not open uinput. Type root password below.");
+
+    if (access("/dev/input/uinput", F_OK) == 0)
+        system("su -c \"chmod +0666 /dev/input/uinput\"");
+    if (access("/dev/uinput", F_OK) == 0)
+        system("su -c \"chmod +0666 /dev/uinput\"");
+    if (access("/dev/misc/uinput", F_OK) == 0)
+        system("su -c \"chmod +0666 /dev/misc/uinput\"");
+}
+
+void check_permissions()
+{
+    /* If there are not enough permissions to write to uinput,
+    this function calls ask_for_password() */
+    if (access("/dev/input/uinput", W_OK) == -1)
+        if (access("/dev/uinput", W_OK) == -1)
+            if (access("/dev/misc/uinput", W_OK) == -1)
+                ask_for_password();
 }
 
 

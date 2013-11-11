@@ -28,6 +28,7 @@ Repository: https://github.com/solusipse/cpress
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
+#include <termios.h>
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <linux/input.h>
@@ -41,6 +42,8 @@ int fd_initialize();
 void finish();
 void initialize();
 void press_key(int key);
+void ask_for_password();
+void check_permissions();
 void error(char *error_code);
 void ci_write(int type, int code, int value);
 
