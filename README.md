@@ -1,8 +1,7 @@
 cpress
 ======
 
-cpress is C library for simulating keyboard actions. It interacts with `/dev/uinput` so it's low level and 
-xserver independent. There are Python and Go bindings.
+cpress was made for simulating keyboard input on Linux systems. It interacts with `/dev/uinput` and therefore is very low level and X Window System independend. There are Python and Go bindings provided.
 
 ----------------------------
 
@@ -10,16 +9,14 @@ xserver independent. There are Python and Go bindings.
 
 ### Before installation ###
 
-Be aware that defaultly `/dev/uinput` is writable only for root.
-You can use cpress as root or change permissions level:
+Be aware that by default `/dev/uinput` is writable only for root.
+You can start cpress as root or, before doing that, change permissions level:
 
 ```bash
 chmod +0666 /dev/uinput
 ```
 
-Cpress asks for root password if is not be able to operate on uinput file. Then
-it will chmod uinput file. If you want to avoid that for some reasons, always run
-as root.
+`cpress` handles this automatically. If permissions level is not sufficient, it asks for root password and sets modes on its own. If you want avoid permissions changes for some reason, start as root.
 
 ----------------------------
 
@@ -27,14 +24,33 @@ as root.
 
 #### Installation ####
 
-See `Makefile` or more informations. Compile example with:
+See `Makefile` or more informations. To compile examples, type:
 ```bash
 make example
 ```
 
 #### Usage ####
 
-See self-explanatory file `examples/example.c` for more informations.
+Before doing anything with `cpress`, you'll have to call `initialize()` function. Then feel free to use these:
+
+```
+press_key(KEY_A);
+```
+
+```
+press_combination(3, KEY_C, KEY_D, KEY_E);
+```
+
+```
+hold_key(KEY_LEFTSHIFT);
+press_key(KEY_E);
+press_key(KEY_E);
+release_key(KEY_LEFTSHIFT);
+```
+
+When you're done with cpress, simply call `finish()`.
+
+For more examples, see self-explanatory file `examples/example.c`.
 
 ----------------------------
 
@@ -86,4 +102,4 @@ See self-explanatory file `examples/example.go` for more informations.
 
 ## License ##
 
-cpress is MIT licensed.
+See `LICENSE`.
