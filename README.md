@@ -1,7 +1,7 @@
 cpress
 ======
 
-cpress was made for simulating keyboard input on Linux systems. It interacts with `/dev/uinput` and therefore is very low level and X Window System independend. There are Python and Go bindings provided.
+cpress was made for simulating keyboard input on Linux systems. It interacts with `/dev/uinput` and therefore is very low level and X Window System independent. There are Python and Go bindings provided.
 
 ----------------------------
 
@@ -10,7 +10,7 @@ cpress was made for simulating keyboard input on Linux systems. It interacts wit
 ### Before installation ###
 
 Be aware that by default `/dev/uinput` is writable only for root.
-You can start cpress as root or, before doing that, change permissions level:
+You can start cpress as root or, before doing that, change permissions level on `uinput`:
 
 ```bash
 chmod +0666 /dev/uinput
